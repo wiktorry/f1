@@ -1,4 +1,5 @@
 package com.example.f1.exceptions;
 
-public class DriverExceptionResponse {
+public record DriverExceptionResponse(String message, int status, long timeStamp) {
+
 }
