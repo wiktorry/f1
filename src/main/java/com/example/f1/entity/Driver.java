@@ -26,4 +26,10 @@ public class Driver {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="teamId")
     private Team team;
+
+    public Driver(String firstName, String lastName, String nationality){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nationality = nationality;
+    }
 }

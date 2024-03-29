@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +24,12 @@ public class Team {
     private String technicalDirector;
     @OneToMany(mappedBy = "driver", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Driver> drivers;
+    public Team(String name, String technicalDirector, List<Driver> drivers){
+        this.name = name;
+        this.technicalDirector = technicalDirector;
+        this.drivers = drivers;
+        for (Driver driver : drivers){
+            driver.setTeam(this);
+        }
+    }
 }
