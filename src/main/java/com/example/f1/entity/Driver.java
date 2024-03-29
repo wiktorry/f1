@@ -23,5 +23,7 @@ public class Driver {
     private String lastName;
     @Column(name = "nationality")
     private String nationality;
-
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name="teamId")
+    private Team team;
 }
