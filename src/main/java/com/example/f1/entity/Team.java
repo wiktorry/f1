@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,8 +23,14 @@ public class Team {
     private String name;
     @Column(name="technicalDirector")
     private String technicalDirector;
-    @OneToMany(mappedBy = "driver", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "team", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Driver> drivers;
+    public void addDriver(Driver driver){
+        if(drivers == null){
+            drivers = new ArrayList<Driver>();
+        }
+        drivers.add(driver);
+    }
     public Team(String name, String technicalDirector, List<Driver> drivers){
         this.name = name;
         this.technicalDirector = technicalDirector;

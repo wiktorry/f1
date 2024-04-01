@@ -64,7 +64,7 @@ class TeamServiceImplTest {
                 "Adrian Newey",
                 List.of(new Driver("Max", "Verstappen", "Netherlands"))
         );
-        assertThatThrownBy(() -> teamService.create(team))
+        assertThatThrownBy(() -> teamService.update(team))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Team must have exactly two drivers");
         verify(teamRepository, never()).save(any());

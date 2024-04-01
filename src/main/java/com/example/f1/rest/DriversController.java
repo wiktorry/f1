@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("f1")
+@RequestMapping("f1/driver")
 public class DriversController {
-    private DriverServiceImpl driverService;
+    private final DriverServiceImpl driverService;
     public DriversController(DriverServiceImpl driverService){
         this.driverService = driverService;
     }
@@ -25,6 +25,7 @@ public class DriversController {
     }
     @PostMapping
     private Driver addDriver(@RequestBody @Valid Driver driver){
+        driver.getTeam().addDriver(driver);
         return driverService.create(driver);
     }
     @PutMapping

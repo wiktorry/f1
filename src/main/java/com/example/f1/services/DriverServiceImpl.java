@@ -37,6 +37,9 @@ public class DriverServiceImpl implements DriverService{
     @Override
     public void deleteById(int id) {
         Driver driver = driverRepository.findById(id).orElseThrow(() -> new NotFoundException("Driver doesn't exist"));
+        List<Driver> drivers = driver.getTeam().getDrivers();
+        drivers.remove(driver);
+        driver.getTeam().setDrivers(drivers);
         driverRepository.deleteById(id);
     }
 }

@@ -5,9 +5,10 @@ import com.example.f1.entity.Team;
 import com.example.f1.exceptions.BadRequestException;
 import com.example.f1.exceptions.NotFoundException;
 import com.example.f1.repositories.TeamRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class TeamServiceImpl implements  TeamService{
     private final TeamRepository teamRepository;
     public TeamServiceImpl(TeamRepository teamRepository){
@@ -26,8 +27,10 @@ public class TeamServiceImpl implements  TeamService{
     @Override
     public Team create(Team team) {
         List<Driver> drivers = team.getDrivers();
-        if (drivers.size() != 2){
-            throw new BadRequestException("Team must have exactly two drivers");
+        if(drivers != null){
+            for (Driver driver : drivers){
+                driver.setTeam(team);
+            }
         }
         return teamRepository.save(team);
     }
@@ -44,6 +47,9 @@ public class TeamServiceImpl implements  TeamService{
     @Override
     public void deleteById(int id) {
         Team team = teamRepository.findById(id).orElseThrow(() -> new NotFoundException("Team doesn't exist"));
+        for (Driver driver : team.getDrivers()){
+            driver.setTeam(null);
+        }
         teamRepository.deleteById(id);
     }
 }
