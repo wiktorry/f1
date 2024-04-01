@@ -1,5 +1,6 @@
 package com.example.f1.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Team {
     @Column(name="technicalDirector")
     private String technicalDirector;
     @OneToMany(mappedBy = "team", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonManagedReference
     private List<Driver> drivers;
     public void addDriver(Driver driver){
         if(drivers == null){
@@ -31,12 +33,9 @@ public class Team {
         }
         drivers.add(driver);
     }
-    public Team(String name, String technicalDirector, List<Driver> drivers){
+    public Team(String name, String technicalDirector, List<Driver> drivers) {
         this.name = name;
         this.technicalDirector = technicalDirector;
         this.drivers = drivers;
-        for (Driver driver : drivers){
-            driver.setTeam(this);
-        }
     }
 }

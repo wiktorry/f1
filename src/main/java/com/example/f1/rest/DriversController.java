@@ -24,12 +24,12 @@ public class DriversController {
         return driverService.findAll();
     }
     @PostMapping
-    private Driver addDriver(@RequestBody @Valid Driver driver){
+    private Driver addDriver(@RequestBody Driver driver){
         driver.getTeam().addDriver(driver);
         return driverService.create(driver);
     }
     @PutMapping
-    private Driver updateDriver(@RequestBody @Valid Driver driver){
+    private Driver updateDriver(@RequestBody Driver driver){
         return driverService.update(driver);
     }
     @DeleteMapping("/{driverId}")

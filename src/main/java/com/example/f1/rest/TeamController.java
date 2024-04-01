@@ -25,11 +25,11 @@ public class TeamController {
         return teamService.findAll();
     }
     @PostMapping
-    private Team addTeam(@RequestBody @Valid Team team){
+    private Team addTeam(@RequestBody Team team){
         return teamService.create(team);
     }
     @PutMapping
-    private Team updateTeam(@RequestBody @Valid Team team){
+    private Team updateTeam(@RequestBody Team team){
         return teamService.update(team);
     }
     @DeleteMapping("/{teamId}")

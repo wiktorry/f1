@@ -1,5 +1,6 @@
 package com.example.f1.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,11 +26,7 @@ public class Driver {
     private String nationality;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="teamId")
+    @JsonBackReference
     private Team team;
 
-    public Driver(String firstName, String lastName, String nationality){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.nationality = nationality;
-    }
 }
