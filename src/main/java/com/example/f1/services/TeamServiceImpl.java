@@ -27,10 +27,11 @@ public class TeamServiceImpl implements  TeamService{
     @Override
     public Team create(Team team) {
         List<Driver> drivers = team.getDrivers();
-        if(drivers != null){
-            for (Driver driver : drivers){
-                driver.setTeam(team);
-            }
+        if (drivers.size() != 2){
+            throw new BadRequestException("Team must have exactly two drivers");
+        }
+        for (Driver driver : drivers){
+            driver.setTeam(team);
         }
         return teamRepository.save(team);
     }
