@@ -16,24 +16,24 @@ public class DriversController {
         this.driverService = driverService;
     }
     @GetMapping("/{driverId}")
-    private Driver getDriverById(@PathVariable int driverId){
+    public Driver getDriverById(@PathVariable int driverId){
         return driverService.findById(driverId);
     }
     @GetMapping
-    private List<Driver> getAllDrivers(){
+    public List<Driver> getAllDrivers(){
         return driverService.findAll();
     }
     @PostMapping
-    private Driver addDriver(@RequestBody Driver driver){
+    public Driver addDriver(@RequestBody Driver driver){
         driver.getTeam().addDriver(driver);
         return driverService.create(driver);
     }
     @PutMapping
-    private Driver updateDriver(@RequestBody Driver driver){
+    public Driver updateDriver(@RequestBody Driver driver){
         return driverService.update(driver);
     }
     @DeleteMapping("/{driverId}")
-    private void deleteUser(@PathVariable int driverId){
+    public void deleteUser(@PathVariable int driverId){
         driverService.deleteById(driverId);
     }
 }

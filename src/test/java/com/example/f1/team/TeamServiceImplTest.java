@@ -4,17 +4,19 @@ import com.example.f1.entity.Driver;
 import com.example.f1.entity.Team;
 import com.example.f1.repositories.TeamRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -31,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TeamServiceImplTest {
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMVC;
@@ -48,22 +52,29 @@ class TeamServiceImplTest {
         dynamicPropertyRegistry.add("spring.datasource.username", mySQLContainer::getUsername);
         dynamicPropertyRegistry.add("spring.datasource.password", mySQLContainer::getPassword);
     }
-    static {
-        mySQLContainer.start();
-    }
-    @Test
-    void testConnectionToDatabase() {
-        Assertions.assertNotNull(teamRepository);
+    @BeforeEach
+    @Transactional
+    void beforeEach(){
+        jdbcTemplate.execute("DELETE FROM drivers");
+        jdbcTemplate.execute("DELETE FROM teams");
+        jdbcTemplate.execute("ALTER TABLE teams AUTO_INCREMENT = 1");
+        jdbcTemplate.execute("ALTER TABLE drivers AUTO_INCREMENT = 1");
+        for (Team team : teams){
+            teamRepository.save(team);
+        }
     }
     @Test
     void testAddTeams() throws Exception{
-        for (Team team : teams){
+        List<Team> newTeams = new ArrayList<>(List.of(
+                new Team("Aston Martin", "Andrew Green", List.of(new Driver(), new Driver())),
+                new Team("Alpine F1", "Matt Harman", List.of(new Driver(), new Driver()))));
+        for (Team team : newTeams){
             String teamJSON = objectMapper.writeValueAsString(team);
             mockMVC.perform(
                     MockMvcRequestBuilders.post("/f1/team").contentType(MediaType.APPLICATION_JSON)
                     .content(teamJSON)).andExpect(status().isOk());
         }
-        Assertions.assertEquals(3, teamRepository.findAll().size());
+        Assertions.assertEquals(5, teamRepository.findAll().size());
     }
     @Test
     void testGetAllTeams() throws Exception{
