@@ -8,12 +8,15 @@ import com.example.f1.repositories.TeamRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
-public class TeamServiceImpl implements  TeamService{
+public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
-    public TeamServiceImpl(TeamRepository teamRepository){
+
+    public TeamServiceImpl(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
     }
+
     @Override
     public Team findById(int id) {
         return teamRepository.findById(id).orElseThrow(() -> new NotFoundException("Team doesn't exist"));
@@ -27,10 +30,10 @@ public class TeamServiceImpl implements  TeamService{
     @Override
     public Team create(Team team) {
         List<Driver> drivers = team.getDrivers();
-        if (drivers.size() != 2){
+        if (drivers.size() != 2) {
             throw new BadRequestException("Team must have exactly two drivers");
         }
-        for (Driver driver : drivers){
+        for (Driver driver : drivers) {
             driver.setTeam(team);
         }
         return teamRepository.save(team);
@@ -39,7 +42,7 @@ public class TeamServiceImpl implements  TeamService{
     @Override
     public Team update(Team team) {
         List<Driver> drivers = team.getDrivers();
-        if (drivers.size() != 2){
+        if (drivers.size() != 2) {
             throw new BadRequestException("Team must have exactly two drivers");
         }
         return teamRepository.save(team);
@@ -48,7 +51,7 @@ public class TeamServiceImpl implements  TeamService{
     @Override
     public void deleteById(int id) {
         Team team = teamRepository.findById(id).orElseThrow(() -> new NotFoundException("Team doesn't exist"));
-        for (Driver driver : team.getDrivers()){
+        for (Driver driver : team.getDrivers()) {
             driver.setTeam(null);
         }
         teamRepository.deleteById(id);

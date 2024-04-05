@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DriverServiceImpl implements DriverService{
+public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
-    public DriverServiceImpl(DriverRepository driverRepository){
+
+    public DriverServiceImpl(DriverRepository driverRepository) {
         this.driverRepository = driverRepository;
     }
 

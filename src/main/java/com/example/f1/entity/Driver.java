@@ -25,7 +25,7 @@ public class Driver {
     @Column(name = "nationality")
     private String nationality;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name="teamId")
+    @JoinColumn(name = "teamId")
     @JsonBackReference
     private Team team;
 
